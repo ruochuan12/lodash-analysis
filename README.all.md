@@ -2,25 +2,13 @@
 
 ## 前言
 
->你好，我是[若川](https://lxchuan12.gitee.io)。这是`学习源码整体架构系列`第三篇。整体架构这词语好像有点大，姑且就算是源码整体结构吧，主要就是学习是代码整体结构，不深究其他不是主线的具体函数的实现。文章学习的是打包整合后的代码，不是实际仓库中的拆分的代码。
+这是`学习源码整体架构系列`第三篇。整体架构这词语好像有点大，姑且就算是源码整体结构吧，主要就是学习是代码整体结构，不深究其他不是主线的具体函数的实现。文章学习的是打包整合后的代码，不是实际仓库中的拆分的代码。
 
->**要是有人说到怎么读源码，正在读文章的你能推荐我的源码系列文章，那真是太好了**。
+上上篇文章写了`jQuery源码整体架构`，[学习 jQuery 源码整体架构，打造属于自己的 js 类库](https://juejin.im/post/5d39d2cbf265da1bc23fbd42)
 
-`学习源码整体架构系列`文章如下：
->1.[学习 jQuery 源码整体架构，打造属于自己的 js 类库](https://juejin.im/post/5d39d2cbf265da1bc23fbd42)<br>
->2.[学习 underscore 源码整体架构，打造属于自己的函数式编程类库](https://juejin.im/post/5d4bf94de51d453bb13b65dc)<br>
->3.[学习 lodash 源码整体架构，打造属于自己的函数式编程类库](https://juejin.im/post/5d767e1d6fb9a06b032025ea)<br>
->4.[学习 sentry 源码整体架构，打造属于自己的前端异常监控SDK](https://juejin.im/post/5dba5a39e51d452a2378348a)<br>
->5.[学习 vuex 源码整体架构，打造属于自己的状态管理库](https://juejin.im/post/5dd4e61a6fb9a05a5c010af0)<br>
->6.[学习 axios 源码整体架构，打造属于自己的请求库](https://juejin.im/post/5df349b5518825123751ba66)<br>
->7.[学习 koa 源码的整体架构，浅析koa洋葱模型原理和co原理](https://juejin.im/post/5e69925cf265da571e262fe6)<br>
->8.[学习 redux 源码整体架构，深入理解 redux 及其中间件原理](https://juejin.im/post/5ee63b7d51882542fc6265ad)
+上一篇文章写了`underscore源码整体架构`，[学习 underscore 源码整体架构，打造属于自己的函数式编程类库](https://juejin.im/post/5d4bf94de51d453bb13b65dc)
 
-感兴趣的读者可以点击阅读。<br>
-其他源码计划中的有：[`express`](https://github.com/lxchuan12/express-analysis)、[`vue-rotuer`](https://github.com/lxchuan12/vue-router-analysis)、[`react-redux`](https://github.com/lxchuan12/react-redux-analysis) 等源码，不知何时能写完（哭泣），欢迎持续关注我（若川）。
-
-源码类文章，一般阅读量不高。已经有能力看懂的，自己就看了。不想看，不敢看的就不会去看源码。<br>
-所以我的文章，尽量写得让想看源码又不知道怎么看的读者能看懂。
+感兴趣的读者可以点击阅读。
 
 `underscore`源码分析的文章比较多，而`lodash`源码分析的文章比较少。原因之一可能是由于`lodash`源码行数太多。注释加起来一万多行。
 
@@ -28,7 +16,7 @@
 
 本文章学习的`lodash`的版本是：`v4.17.15`。`unpkg.com`地址 https://unpkg.com/lodash@4.17.15/lodash.js
 
-文章篇幅可能比较长，可以先收藏再看，所以笔者使用了展开收缩的形式。
+文章篇幅可能比较长，可以先收藏再看。
 
 **导读：**
 >文章主要学习了`runInContext()` 导出`_`  `lodash`函数使用`baseCreate`方法原型继承`LodashWrapper`和`LazyWrapper`，`mixin`挂载方法到`lodash.prototype`、后文用结合例子解释`lodash.prototype.value(wrapperValue)`和`Lazy.prototype.value(lazyValue)`惰性求值的源码具体实现。
@@ -159,9 +147,7 @@ function isObject(value) {
 
 ### Object.create() 用法举例
 
-[面试官问：能否模拟实现JS的new操作符](https://juejin.im/post/5bde7c926fb9a049f66b8b52) 之前这篇文章写过的一段，所以这里收缩起来了。
-<details>
-<summary> 点击 查看 Object.create() 用法举例</summary>
+[面试官问：能否模拟实现JS的new操作符](https://juejin.im/post/5bde7c926fb9a049f66b8b52) 之前这篇文章写过的一段。
 
 笔者之前整理的一篇文章中也有讲过，可以翻看[JavaScript 对象所有API解析](https://segmentfault.com/a/1190000010753942)
 
@@ -209,8 +195,6 @@ if (typeof Object.create !== "function") {
 }
 ```
 
-</details>
-
 `lodash`上有很多方法和属性，但在`lodash.prototype`也有很多与`lodash`上相同的方法。肯定不是在`lodash.prototype`上重新写一遍。而是通过`mixin`挂载的。
 
 ## mixin
@@ -244,9 +228,7 @@ _.mixin([object=lodash], source, [options={}])
 >(*): 返回 object.
 
 ### mixin 源码
-
-<details>
-<summary>点击这里展开mixin源码，后文注释解析</summary>
+mixin源码，后文注释解析
 
 ```js
 function mixin(object, source, options) {
@@ -286,7 +268,6 @@ function mixin(object, source, options) {
 }
 ```
 
-</details>
 接下来先看衍生的函数。
 
 **其实看到具体定义的函数代码就大概知道这个函数的功能。为了不影响主线，导致文章篇幅过长。具体源码在这里就不展开。**
@@ -413,8 +394,7 @@ mixin(lodash, (function() {
 ```
 
 结合两次调用`mixin` 代入到源码解析如下
-<details>
-<summary>点击这里展开mixin源码及注释</summary>
+mixin源码及注释
 
 ```js
 function mixin(object, source, options) {
@@ -499,7 +479,6 @@ function mixin(object, source, options) {
 }
 ```
 
-</details>
 
 小结：简单说就是把`lodash`上的静态方法赋值到`lodash.prototype`上。分两次第一次是支持链式调用（`lodash.after`等 `153 `个支持链式调用的方法），第二次是不支持链式调用的方法（`lodash.add`等`152`个不支持链式调用的方法）。
 
@@ -593,8 +572,7 @@ console.log(result, 'result');
 ["drop", "dropRight", "take", "takeRight", "filter", "map", "takeWhile", "head", "last", "initial", "tail", "compact", "find", "findLast", "invokeMap", "reject", "slice", "takeRightWhile", "toArray", "clone", "reverse", "value"]
 ```
 
-<details>
-<summary>点击这里展开具体源码及注释</summary>
+具体源码及注释
 
 ```js
 // Add `LazyWrapper` methods to `lodash.prototype`.
@@ -689,18 +667,15 @@ baseForOwn(LazyWrapper.prototype, function(func, methodName) {
 });
 ```
 
-</details>
-
 小结一下，写了这么多注释，简单说：其实就是用`LazyWrapper.prototype` 改写原先在`lodash.prototype`的函数，判断函数是否需要使用惰性求值，需要时再调用。
 
 **读者可以断点调试一下，善用断点进入函数功能，对着注释看，可能会更加清晰。**
-<details>
-<summary>点击查看断点调试的部分截图</summary>
+
+断点调试的部分截图
 
 ![例子的chain和map执行后的debugger截图](./demo-chain-map-result-debugger.png)
 ![例子的chain和map执行后的结果截图](./demo-chain-map-result.png)
 
-</details>
 
 链式调用最后都是返回实例对象，实际的处理数据的函数都没有调用，而是被存储存储下来了，最后调用`value`方法，才执行这些函数。
 
@@ -728,9 +703,7 @@ lodash.prototype.toJSON = lodash.prototype.valueOf = lodash.prototype.value = wr
 
 ## LazyWrapper.prototype.value 即 lazyValue 惰性求值
 
-<details>
-<summary>点击这里展开lazyValue源码及注释</summary>
-
+lazyValue源码及注释
 ```js
 function LazyWrapper(value) {
 	// 参数 value
@@ -836,7 +809,6 @@ LazyWrapper.prototype.constructor = LazyWrapper;
 LazyWrapper.prototype.value = lazyValue;
 ```
 
-</details>
 
 笔者画了一张 `lodash`和`LazyWrapper`的关系图来表示。
 ![`lodash`和`LazyWrapper`的关系图](./lodash-v4.17.15-LazyWrapper.prototype.png)
@@ -873,6 +845,8 @@ var result = _.chain([1, 2, 3, 4, 5])
 
 ## 笔者往期文章
 
+[学习 underscore 源码整体架构，打造属于自己的函数式编程类库](https://juejin.im/post/5d4bf94de51d453bb13b65dc)<br>
+[学习 jQuery 源码整体架构，打造属于自己的 js 类库](https://juejin.im/post/5d39d2cbf265da1bc23fbd42)<br>
 [面试官问：JS的继承](https://juejin.im/post/5c433e216fb9a049c15f841b)<br>
 [面试官问：JS的this指向](https://juejin.im/post/5c0c87b35188252e8966c78a)<br>
 [面试官问：能否模拟实现JS的call和apply方法](https://juejin.im/post/5bf6c79bf265da6142738b29)<br>
@@ -883,15 +857,14 @@ var result = _.chain([1, 2, 3, 4, 5])
 ## 关于
 
 作者：常以**若川**为名混迹于江湖。前端路上 | PPT爱好者 | 所知甚少，唯善学。<br>
-[若川的博客](https://lxchuan12.gitee.io)，使用`vuepress`重构了，阅读体验可能更好些<br>
+[个人博客-若川](https://lxchuan12.github.io/)，使用`vuepress`重构了，阅读体验可能更好些<br>
 [掘金专栏](https://juejin.im/user/1415826704971918/posts)，欢迎关注~<br>
 [`segmentfault`前端视野专栏](https://segmentfault.com/blog/lxchuan12)，欢迎关注~<br>
 [知乎前端视野专栏](https://zhuanlan.zhihu.com/lxchuan12)，欢迎关注~<br>
-[语雀前端视野专栏](https://www.yuque.com/lxchuan12/blog)，新增语雀专栏，欢迎关注~<br>
 [github blog](https://github.com/lxchuan12/blog)，相关源码和资源都放在这里，求个`star`^_^~
 
 ## 微信公众号  若川视野
 
-可能比较有趣的微信公众号，长按扫码关注（**回复pdf获取前端优质书籍pdf**）。欢迎加笔者微信`ruochuan12`（注明来源，基本来者不拒），拉您进【前端视野交流群】，长期交流学习~
+可能比较有趣的微信公众号，长按扫码关注。也可以加微信 `ruochuan12`，注明来源，拉您进【前端视野交流群】。
 
 ![若川视野](../about/wechat-official-accounts-mini.png)

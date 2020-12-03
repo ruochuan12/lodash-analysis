@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>lodash</title>
+</head>
+<body>
+<script src="./lodash-v4.17.15.js"></script>
+<script>
+// console.log(_, 'lodash');
+// console.log('lodash', {'lodash': _});
+// var users = [
+//   { 'user': 'barney',  'age': 36 },
+//   { 'user': 'fred',    'age': 40 },
+//   { 'user': 'pebbles', 'age': 1 }
+// ];
+
+// debugger;
+// var youngest = _
+//   .chain(users)
+//   .sortBy('age')
+//   .map(function(o) {
+//     return o.user + ' is ' + o.age;
+//   })
+//   .head()
+//   .value();
+
+debugger;
+var result = _.chain([1, 2, 3, 4, 5])
+.map(el => el + 1)
+.take(3)
+.value();
+
+console.log('result:', result);
+
+</script>
+</body>
+</html>
