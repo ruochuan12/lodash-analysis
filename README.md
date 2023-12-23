@@ -59,7 +59,7 @@ var _ = runInContext();
 var runInContext = (function runInContext(context) {
 	// 浏览器中处理context为window
 	// ...
-	function lodash(value) {}{
+	function lodash(value) {
 		// ...
 		return new LodashWrapper(value);
 	}
